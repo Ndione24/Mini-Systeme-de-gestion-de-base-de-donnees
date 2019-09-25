@@ -2,33 +2,50 @@ package DataBase;
 
 public class DBManager {
 	
+	private static DBManager instanceUnique ;
+	
+	public static synchronized DBManager getInstance () {
+		
+		
+		return instanceUnique ;
+	}
+		
 	/**
-	 * description: qui fera le nécessaire pour l’initialisation d’une instance
+	 * description: qui fera le nÃ©cessaire pour lâ€™initialisation dâ€™une instance
 	 * @param
 	 */
-	public static  void init()
-	{
-		
+	public static  void init(){
+		DBDef.getInstance().init() ;
 	}
 	/**
-	 @Description: s'occupe du ménage 
+	 * @Description: s'occupe du mÃ©nage 
 	 */
-	public static void finish()
-	{
+	public static void finish(){
+		DBDef.getInstance().init() ;
+	}
+	
+	/*
+	 * @param :commande entrÃ©e 
+	 */
+	public void processCommand(byte command) {
 		
 	}
 	
 	/*
-	 * @param :commande entrée 
+	 * @Description: cette mÃ©thode crÃ©era une RelDef conformÃ©ment aux arguments et la rajoutera au DBDef
+	 * @param :nomRel
+	 * @param :nbCol
+	 * @param :typeCol
 	 */
-	public void processCommand(byte command) 
-	{
+	
+	public void createRelation (String nomRel , int nbCol , String[] typeCol ) {
 		
+		DBDef.getInstance().addRelation(new RelDef(nomRel , nbCol , typeCol )) ;
 	}
 
 	public static void main(String [] args)
 	{
-		//la création (si besoin) de l’instance de DBManage
+		//la crÃ©ation (si besoin) de lâ€™instance de DBManage
 		
 		init();
 		
