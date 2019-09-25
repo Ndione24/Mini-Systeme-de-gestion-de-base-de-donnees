@@ -38,7 +38,7 @@ public class DBManager {
 	 * @param :typeCol
 	 */
 	
-	public void createRelation (String nomRel , int nbCol , String[] typeCol ) {
+	public void createRelation (String nomRel , int nbCol , List<String> typeCol ) {
 		
 		DBDef.getInstance().addRelation(new RelDef(nomRel , nbCol , typeCol )) ;
 	}
