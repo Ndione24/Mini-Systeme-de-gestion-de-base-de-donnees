@@ -1,20 +1,21 @@
 package projetBdd;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.StringTokenizer;
 
 public class DBManager {
+	/**
+	 * Instance pour creer une instance unique de la classe
+	 */
+	private static DBManager INSTANCE;
 
 	/**
 	 * 1er constructeur le la classe DBManager, il se peut qu'on en ait besoin
 	 */
 	private DBManager() {
-
+		INSTANCE = new DBManager();
 	}
-
-	/**
-	 * Instance pour creer une instance unique de la classe
-	 */
-	private static DBManager INSTANCE;
 
 	/**
 	 * cette méthode retourne une Instance unique de cette classe synchronized :
@@ -46,6 +47,8 @@ public class DBManager {
 		// Appel à la méthode finish() de la classe DBDef
 		DBDef.getINSTANCE().finish();
 	}
+	
+
 
 	/**
 	 * 
@@ -53,10 +56,55 @@ public class DBManager {
 	 */
 
 	public void processCommand(String cmde) {
+		// decoupage de la ligne de commande en plusieurs mots
+		StringTokenizer st = new StringTokenizer(cmde);
+
+		// création d'une liste dans laquelle sera stocker les mots decompsés
+		List<String> mots = new ArrayList<String>();
+
+		// Boucle de parcours du StringTokenizer
+		while (st.hasMoreTokens()) {
+
+			// Ajout du mot dans la liste
+			mots.add(st.nextToken());
+		}
+
+		// Gestion des mots clés avec switch
+		switch (mots.get(0)) {
+
+		case "create":
+			// Créer d'une rélation
+			createRelation(mots.get(1) ,Integer.parseInt(mots.get(2)), mots);
+			break;
+		case "insert":
+			// Inserer un Record dans une Relation
+			insert(mots);
+			break;
+		case "clean":
+			// Fait le ménage général
+			clean();
+			break;
+
+		default:
+			// Affiche le message d'erreur
+			System.out.println("Erreur: Saisie incorrecte");
+			break;
+		}
 
 	}
 
+	/**
+	 * Cette methode cree une nouvelle relation et la rajoute à l'instance de DBDef
+	 * avce les paramètres passés
+	 * 
+	 * @param nomRelation   : le nom de la relation
+	 * @param nbRelation    : le nombre de colonnes
+	 * @param typesColonnes : lestype des colonnes
+	 */
 	public void createRelation(String nomRelation, int nbRelation, List<String> typesColonnes) {
+		RelDef relation = new RelDef(nomRelation, nbRelation);
+		relation.setTypesColonnes(typesColonnes);
+		DBDef.getINSTANCE().addRelation(relation);
 
 	}
 }
