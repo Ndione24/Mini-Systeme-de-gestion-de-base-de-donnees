@@ -1,43 +1,145 @@
-package DataBase;
+package projetBdd;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.RandomAccessFile;
-import java.nio.ByteBuffer;
+import java.io.*;
 
 public class DiskManager {
-	//private RandomAccessFile isr;
-	
-	
-	/*public DiskManager(String Data_) {
-		try {
-			isr = new RandomAccessFile(Data_,"rw");
-		}catch(IOException e) {
-			System.out.println("Erreur d'ouverture du fichier"+ e.getMessage());
-		}
-	}*/
-	
+	private static DiskManager INSTANCE;
+
+	/**
+	 * Constructeur sans parametres de cette classe
+	 */
+	private DiskManager() {
+		INSTANCE = new DiskManager();
+	}
+
+	/**
+	 * 
+	 * @return : une instance unqiue de cette classe
+	 */
+	public static synchronized DiskManager getInstance() {
+		if (INSTANCE == null) {
+			INSTANCE = new DiskManager();
+			return INSTANCE;
+		} else
+			return INSTANCE;
+	}
+
+	/**
+	 * Cette méthode crée (dans le sous-dossier DB) un fichier Data_fileIdx.rf
+	 * initialement vide
+	 * 
+	 * @param fileIdx : indice du fichier
+	 */
 	public void createFile(int fileIdx) {
-		File f = new File("Data_"+fileIdx+".rf");
-		if(!f.exists()) {
-			try {
-				f.createNewFile();
-			}catch(IOException e){
-				System.out.println("Le nom du fichier existe d�j�\n"+ e.getMessage());
-			}
+		try {
+			// Création du fichier
+			RandomAccessFile file = new RandomAccessFile(chemin + "Data_" + fileIdx + ".rf.dat", "rw");
+			// fermeture du fichier
+			file.close();
+		} catch (FileNotFoundException e) {
+
+			// Affichage du message d'erreur
+			System.out.println("Fichier non trouvé " + e.getMessage());
+			e.getStackTrace();
+		} catch (IOException e) {
+
+			// Affichage du message d'erreur
+			System.out.println(e.getMessage());
+			e.getStackTrace();
+		}
+
+	}
+
+	public PageId addPage(int fileIdx, PageId pageId) {
+		// variable dans laquelle sera stockée l'identifiant de la page
+		int idDeLaPage = 0;
+
+		try {
+			// ouverture du fichier en mode lecture et écriture
+			RandomAccessFile file = new RandomAccessFile(chemin + "Data_" + fileIdx + ".rf.dat", "rw");
+
+			// Positionner le curseur à la fin du fichier
+			file.seek(file.length());
+
+			// Ecrire la page dans le fichier
+			file.write(new byte[Constants.PAGESIZE]);
+
+			// Calcul de l'indentifiant de la page
+			idDeLaPage = (int) (file.length()) / Constants.PAGESIZE - 1;
+
+			// fermeture du fichier
+			file.close();
+
+		} catch (FileNotFoundException e) {
+
+			// affichage du message d'erreur
+			System.out.println(e.getMessage());
+			e.getStackTrace();
+		} catch (IOException e) {
+			// affichage du message d'erreur
+			System.out.println(e.getMessage());
+			e.getStackTrace();
+		}
+		// Remplir la variable pageId avce les valeurs correspondantes
+		pageId.setFileIdx(fileIdx);
+		pageId.setPageIdx(idDeLaPage);
+		// on retourne padeId
+		return pageId;
+
+	}
+
+	/**
+	 * 
+	 * @param pid    : id de la pade
+	 * @param buffer : tableau qui contiendra le le contenu du fichier à la page
+	 *               idDeLaPage
+	 */
+	public void readPage(PageId idDeLaPage, byte[] buffer) {
+
+		try {
+			// ouverture du fichier en mode lecture
+			RandomAccessFile file = new RandomAccessFile(chemin + "Data_" + idDeLaPage.getFileIdx() + ".rf.dat", "r");
+
+			// Positionner le curseur sur la page à lire
+			file.seek(idDeLaPage.getPageIdx() * (Constants.PAGESIZE));
+
+			// Lire la page dans le buffer
+			file.read(buffer);
+
+			// Fermeture du fichier
+			file.close();
+		} catch (FileNotFoundException e) {
+
+			// affichage du message d'erreur
+			System.out.println(e.getMessage());
+		} catch (IOException e) {
+			// affichage du message d'erreur
+			System.out.println(e.getMessage());
 		}
 	}
 
-	public PageId addPage(int fileIdx) {
-		
-		return null;
+	public void writePage(PageId idDeLaPage, byte[] buffer) {
+
+		try {
+			// ouverture du fichier en mode lecture
+			RandomAccessFile file = new RandomAccessFile(chemin + "Data_" + idDeLaPage.getFileIdx() + ".rf.dat", "r");
+
+			// Positionner le curseur sur la page à lire
+			file.seek(idDeLaPage.getPageIdx() * (Constants.PAGESIZE));
+
+			// Lire la page dans le buffer
+			file.write(buffer);
+
+			// Fermeture du fichier
+			file.close();
+		} catch (FileNotFoundException e) {
+
+			// affichage du message d'erreur
+			System.out.println(e.getMessage());
+		} catch (IOException e) {
+			// affichage du message d'erreur
+			System.out.println(e.getMessage());
+		}
 	}
-	
-	public void ReadPage(PageId id, ByteBuffer buff) {
-		
-	}
-	
-	public void WritePage(PageId id, ByteBuffer buff) {
-		
-	}
+
 }
