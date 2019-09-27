@@ -1,9 +1,5 @@
-package DataBase;
+package projetBdd;
 
 public class Constants {
-	private int pageSize;
-	
-	public Constants() {
-		pageSize=4096;
-	}
+static final int PAGESIZE = 4096;
 }
