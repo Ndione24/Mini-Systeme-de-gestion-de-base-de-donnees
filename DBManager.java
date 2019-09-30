@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
+//lhoumeau.maxmime@gmail.com
 public class DBManager {
 	/**
 	 * Instance pour creer une instance unique de la classe
@@ -68,22 +69,27 @@ public class DBManager {
 			// Ajout du mot dans la liste
 			mots.add(st.nextToken());
 		}
+		//Maintenant on met les types dans un autre vecteur
+		ArrayList<String> lesTypes = new ArrayList<String>();
+		for(int i=3;i<mots.size();i++) {
+			lesTypes.add(mots.get(i));
+		}
 
 		// Gestion des mots clés avec switch
 		switch (mots.get(0)) {
 
 		case "create":
 			// Créer d'une rélation
-			createRelation(mots.get(1) ,Integer.parseInt(mots.get(2)), mots);
+			createRelation(mots.get(1) ,Integer.parseInt(mots.get(2)), lesTypes);
 			break;
-		case "insert":
+	/*	case "insert":
 			// Inserer un Record dans une Relation
 			insert(mots);
 			break;
 		case "clean":
 			// Fait le ménage général
 			clean();
-			break;
+			break;*/
 
 		default:
 			// Affiche le message d'erreur
