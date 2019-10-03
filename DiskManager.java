@@ -9,7 +9,7 @@ public class DiskManager {
 	 * Constructeur sans parametres de cette classe
 	 */
 	private DiskManager() {
-		INSTANCE = new DiskManager();
+	
 	}
 
 	/**
