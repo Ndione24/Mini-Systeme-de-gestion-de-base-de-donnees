@@ -33,7 +33,7 @@ public class DiskManager {
 	public void createFile(int fileIdx) {
 		try {
 			// Création du fichier
-			RandomAccessFile file = new RandomAccessFile(chemin + "Data_" + fileIdx + ".rf.dat", "rw");
+			RandomAccessFile file = new RandomAccessFile("DB" + "Data_" + fileIdx + ".rf.dat", "rw");
 			// fermeture du fichier
 			file.close();
 		} catch (FileNotFoundException e) {
@@ -61,11 +61,10 @@ public class DiskManager {
 			// Positionner le curseur à la fin du fichier
 			file.seek(file.length());
 
-			// Ecrire la page dans le fichier
-			file.write(new byte[Constants.PAGESIZE]);
-
 			// Calcul de l'indentifiant de la page
 			idDeLaPage = (int) (file.length()) / Constants.PAGESIZE - 1;
+			// Ecrire la page dans le fichier
+			file.write(new byte[Constants.PAGESIZE]);
 
 			// fermeture du fichier
 			file.close();
@@ -122,7 +121,7 @@ public class DiskManager {
 
 		try {
 			// ouverture du fichier en mode lecture
-			RandomAccessFile file = new RandomAccessFile("../../DB/" + "Data_" + idDeLaPage.getFileIdx() + ".rf.dat", "r");
+			RandomAccessFile file = new RandomAccessFile("../../DB/" + "Data_" + idDeLaPage.getFileIdx() + ".rf", "r");
 
 			// Positionner le curseur sur la page à lire
 			file.seek(idDeLaPage.getPageIdx() * (Constants.PAGESIZE));
