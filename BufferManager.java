@@ -1,32 +1,26 @@
 package projetBdd;
 
-import java.io.IOException;
-import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.List;
 
 public class BufferManager {
-	
-	//instance unique 
+
+	// instance unique
 	private static BufferManager INSTANCE;
-	//constructeur du singleton 
-	private BufferManager ()
-	{
-		INSTANCE=new BufferManager() ;
+
+	// constructeur du singleton
+	private BufferManager() {
+		INSTANCE = new BufferManager();
 	}
-	
+
 	//
-	public static synchronized  BufferManager getInstance()
-	{
-		if (INSTANCE==null)
-		{
-			INSTANCE = new BufferManager() ;
-			return INSTANCE ;
-		}
-		else
-		return INSTANCE ;
-	}	
-	
+	public static synchronized BufferManager getInstance() {
+		if (INSTANCE == null) {
+			INSTANCE = new BufferManager();
+			return INSTANCE;
+		} else
+			return INSTANCE;
+	}
 
 	// Question pour le prof: Qu'est-ce qu'un bufferpool?
 	private List<Frame> bufferpool = new ArrayList(2);
@@ -34,11 +28,13 @@ public class BufferManager {
 	// liste des frames pour avoir un historique des pages à remplacer
 
 	List<Frame> listeDesPagesPourLRU = new ArrayList<Frame>();
-/**
- * cette methode retourne le contenu du buffer associé à une page 
- * @param pageId
- * @return
- */
+
+	/**
+	 * cette methode retourne le contenu du buffer associé à une page
+	 * 
+	 * @param pageId
+	 * @return
+	 */
 	public byte[] getPage(PageId pageId) {
 
 		boolean tr = false;
@@ -280,7 +276,7 @@ public class BufferManager {
 			// Récupérer la page
 			PageId pageUrl = listeDesPagesPourLRU.get(i).getIdDeLaPage();
 
-			// Verifier s'il  s'agit bien de la page à supprimer
+			// Verifier s'il s'agit bien de la page à supprimer
 			if (page.getFileIdx() == pageUrl.getFileIdx() && page.getPageIdx() == pageUrl.getPageIdx()) {
 				// Supprimer la page
 				listeDesPagesPourLRU.remove(i);
@@ -293,6 +289,47 @@ public class BufferManager {
 			// Incrémenter le compteur
 			i++;
 		}
+
+	}
+
+	/**
+	 * Cette méthode permet d'écrire toutes les pages dont le flag dirty=1 sur
+	 * disque et initialise le flag dirty
+	 */
+	public void flushAll() {
+		// l'indice de parcours
+		int i = 0;
+
+		// Boucle de parcours du bufferPool
+		while (i < bufferpool.size()) {
+			// Si dirty=1
+			if (bufferpool.get(i).getFlagDirty() == 1) {
+				// Récupérer la frame
+				Frame frame = bufferpool.get(i);
+
+				// Ecrire les pages dirty sur disque
+				DiskManager.getInstance().writePage(frame.getIdDeLaPage(), frame.getBuffer());
+			}
+
+			// incrementer l'indice de parcours
+			i++;
+		}
+		// initialisation
+		initialiser();
+
+	}
+
+	/**
+	 * Cette méthode initialise les attributs de cette classe
+	 */
+	public void initialiser() {
+		// Initialiser le bufferpool et la liste des page pour LRU
+		bufferpool.clear();
+		listeDesPagesPourLRU.clear();
+		bufferpool = new ArrayList<Frame>(Constants.FRAMECOUNT);
+		bufferpool.add(new Frame());
+		bufferpool.add(new Frame());
+		listeDesPagesPourLRU = new ArrayList<Frame>();
 
 	}
 
