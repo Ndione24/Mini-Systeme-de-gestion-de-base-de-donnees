@@ -6,6 +6,27 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BufferManager {
+	
+	//instance unique 
+	private static BufferManager INSTANCE;
+	//constructeur du singleton 
+	private BufferManager ()
+	{
+		INSTANCE=new BufferManager() ;
+	}
+	
+	//
+	public static synchronized  BufferManager getInstance()
+	{
+		if (INSTANCE==null)
+		{
+			INSTANCE = new BufferManager() ;
+			return INSTANCE ;
+		}
+		else
+		return INSTANCE ;
+	}	
+	
 
 	// Question pour le prof: Qu'est-ce qu'un bufferpool?
 	private List<Frame> bufferpool = new ArrayList(2);
