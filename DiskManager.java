@@ -33,7 +33,7 @@ public class DiskManager {
 	public void createFile(int fileIdx) {
 		try {
 			// Création du fichier
-			RandomAccessFile file = new RandomAccessFile("DB" + "Data_" + fileIdx + ".rf.dat", "rw");
+			RandomAccessFile file = new RandomAccessFile("DB" + "Data_" + fileIdx + ".rf", "rw");
 			// fermeture du fichier
 			file.close();
 		} catch (FileNotFoundException e) {
