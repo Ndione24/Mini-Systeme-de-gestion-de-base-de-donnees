@@ -23,7 +23,7 @@ public class BufferManager {
 	}
 
 	// Question pour le prof: Qu'est-ce qu'un bufferpool?
-	private List<Frame> bufferpool = new ArrayList(2);
+	private List<Frame> bufferpool = new ArrayList<Frame>(2);
 
 	// liste des frames pour avoir un historique des pages à remplacer
 
