@@ -15,7 +15,7 @@ public class DBManager {
 	 * 1er constructeur le la classe DBManager, il se peut qu'on en ait besoin
 	 */
 	private DBManager() {
-		INSTANCE = new DBManager();
+	
 	}
 
 	/**
