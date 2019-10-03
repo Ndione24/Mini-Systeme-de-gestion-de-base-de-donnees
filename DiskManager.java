@@ -56,7 +56,7 @@ public class DiskManager {
 
 		try {
 			// ouverture du fichier en mode lecture et écriture
-			RandomAccessFile file = new RandomAccessFile(chemin + "Data_" + fileIdx + ".rf.dat", "rw");
+			RandomAccessFile file = new RandomAccessFile("../../DB/" + "Data_" + fileIdx + ".rf", "rw");
 
 			// Positionner le curseur à la fin du fichier
 			file.seek(file.length());
@@ -98,7 +98,7 @@ public class DiskManager {
 
 		try {
 			// ouverture du fichier en mode lecture
-			RandomAccessFile file = new RandomAccessFile(chemin + "Data_" + idDeLaPage.getFileIdx() + ".rf.dat", "r");
+			RandomAccessFile file = new RandomAccessFile("../../DB/" + "Data_" + idDeLaPage.getFileIdx() + ".rf", "r");
 
 			// Positionner le curseur sur la page à lire
 			file.seek(idDeLaPage.getPageIdx() * (Constants.PAGESIZE));
@@ -122,7 +122,7 @@ public class DiskManager {
 
 		try {
 			// ouverture du fichier en mode lecture
-			RandomAccessFile file = new RandomAccessFile(chemin + "Data_" + idDeLaPage.getFileIdx() + ".rf.dat", "r");
+			RandomAccessFile file = new RandomAccessFile("../../DB/" + "Data_" + idDeLaPage.getFileIdx() + ".rf.dat", "r");
 
 			// Positionner le curseur sur la page à lire
 			file.seek(idDeLaPage.getPageIdx() * (Constants.PAGESIZE));
