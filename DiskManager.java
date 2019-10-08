@@ -97,7 +97,7 @@ public class DiskManager {
 
 		try {
 			// ouverture du fichier en mode lecture
-			RandomAccessFile file = new RandomAccessFile("../../DB/" + "Data_" + idDeLaPage.getFileIdx() + ".rf", "r");
+			RandomAccessFile file = new RandomAccessFile("../../DB/" + "Data_" + idDeLaPage.getFileIdx() + ".rf", "rw");
 
 			// Positionner le curseur sur la page à lire
 			file.seek(idDeLaPage.getPageIdx() * (Constants.PAGESIZE));
