@@ -1,6 +1,7 @@
 package projetBdd;
 
 import java.util.List;
+import java.util.StringTokenizer;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -120,12 +121,19 @@ public class Record {
 	 */
 
 	public void readFromBuffer(ByteBuffer buff, int position) {
-       
-		//On converti le buffer en String
-		 String s =Arrays.toString(buff.array());
-		 //onn Affiche le budder à partir de position
-		for(int i=position;i<buff.capacity();i++) {
-			System.out.println(s.charAt(i));
+
+		// On converti le buffer en String
+		String s = Arrays.toString(buff.array());
+		//on supprimme les espaces et virgules
+		StringTokenizer st = new StringTokenizer(s, ", [ ]");
+		StringBuilder sb = new StringBuilder();
+		while (st.hasMoreTokens()) {
+			sb.append(st.nextToken());
+		}
+		sb.toString();
+		// on affiche à partir de la position
+		for (int i = position; i < sb.length(); i++) {
+			System.out.print(sb.charAt(i));
 		}
 
 	}
