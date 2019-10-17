@@ -142,11 +142,7 @@ public class DBManager {
 		 */
 		relation.setSlotCount(Constants.PAGESIZE / (recordSize+1));
 
-		// Ajout du nom de la rélation
-		relation.setNomRelation(nomRelation);
-
-		// Ajout du nombre de colonnes de la rélation
-		relation.setNbColonnes(nbRelation);
+	
 
 		// Ajout des types de colonnes de la rélation
 		relation.setTypesColonnes(typesColonnes);
