@@ -104,8 +104,7 @@ public class DBManager {
 	 * @param typesColonnes : lestype des colonnes
 	 */
 	public void createRelation(String nomRelation, int nbRelation, List<String> typesColonnes) {
-		RelDef relation = new RelDef(nomRelation, nbRelation);
-		DBDef.getINSTANCE().addRelation(relation);
+
 		// on va rajouter les calculs demandés au niveau
 		// du tp4 pour mettre à jour recodSize et slotCount dansRelDef
 		int recordSize = 0;
@@ -124,34 +123,34 @@ public class DBManager {
 				recordSize += 2;
 			else {
 				// on recupere la taille de la chaine
-				//càd le chiffre à la fin du string
-				//exple string7 donc 7
+				// càd le chiffre à la fin du string
+				// exple string7 donc 7
 				String reste = type.replace("string", "").trim();
 				// Mettre 2 octets par caractère
 				recordSize += (Integer.parseInt(reste) * 2);
 			}
 		}
 		/*
-		 * Maintenant on mets à jour les valeurs des varaibles
-		 * recordSize et slotCount dans la classe RelDef
+		 * Maintenant on mets à jour les valeurs des varaibles recordSize et slotCount
+		 * dans la classe RelDef
 		 */
+		RelDef relation = new RelDef(nomRelation, nbRelation);
+
 		relation.setRecordSize(recordSize);
 		/*
 		 * le nombre de slot sera la taille de la page divisé par le recodSize
 		 */
-		relation.setSlotCount(Constants.PAGESIZE/recordSize);
-	       
-	     //Ajout du nom de la rélation
-	       relation.setNomRelation(nomRelation);
-	       
-	     //Ajout du  nombre de colonnes de la rélation
-	       relation.setNbColonnes(nbRelation);
-	       
-	     //Ajout des types de colonnes de la rélation
-	       relation.setTypesColonnes(typesColonnes);
-	       
-	    
-		
+		relation.setSlotCount(Constants.PAGESIZE / (recordSize+1));
+
+		// Ajout du nom de la rélation
+		relation.setNomRelation(nomRelation);
+
+		// Ajout du nombre de colonnes de la rélation
+		relation.setNbColonnes(nbRelation);
+
+		// Ajout des types de colonnes de la rélation
+		relation.setTypesColonnes(typesColonnes);
+		DBDef.getINSTANCE().addRelation(relation);
 
 	}
 }
