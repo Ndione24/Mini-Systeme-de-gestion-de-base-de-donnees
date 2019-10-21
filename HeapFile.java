@@ -28,11 +28,7 @@ public class HeapFile {
 		try {
 			//ajout d'une page au fichier nouvellement crée  (A)
 			PageId newPage=DiskManager.getInstance().addPage(index);
-			
-			//(B)//ajout d'une page au fichier nouvellement crée 
-			Frame f = new Frame(newPage);
-			
-			 DiskManager.getInstance().addPage(f.getIdDeLaPage().getFileIdx()); 
+
 			
 			
 			
