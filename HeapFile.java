@@ -64,4 +64,58 @@ public class HeapFile {
 		
 		
 	}
+	/**
+	 * 
+	 * @param record
+	 * @param pageId
+	 * @return Cette méthode doit écrire record dans la page de données identifiée
+	 *         par pageId, et renvoyer son Rid
+	 */
+	public Rid writeRecordToDataPage(Record record, PageId pageId) {
+		/*
+		 * On recupere le contenu du buffer de la page de via le buferManager
+		 */
+
+		byte[] page = BufferManager.getInstance().getPage(pageId);
+		ByteBuffer bf = ByteBuffer.wrap(page);
+		int nbslots = relDef.getSlotCount();
+		int i = 0;
+		boolean isFounded = false;
+		// on recherche un slot libre dans la page
+		while (i < nbslots && !isFounded) {
+			if (page[i] == 1)
+				isFounded = true;
+			else
+				i++;
+		}
+		record.writeToBuffer(bf, nbslots + i * relDef.getRecordSize());
+		// mise à jour de bytemap et HeaderPage
+		relDef.setSlotCount(nbslots - 1);
+		page[i]--;
+		return new Rid(pageId, i);
+
+	}
+
+	/**
+	 * Cette méthode doit retourner le PageId d’une page de données qui a encore des
+	 * cases libres.
+	 */
+	public PageId getFreeDataPageId() {
+		int indiceFichier = relDef.getFileIdx();
+		PageId pageId = new PageId(indiceFichier, 0);
+		// je recupère le headerpage
+		byte[] page = BufferManager.getInstance().getPage(pageId);
+
+		ByteBuffer b = ByteBuffer.wrap(page);
+
+		int nbPages = (b.getInt(0));
+		for (int i = 1; i <= nbPages; i++) {
+			if (b.getInt(i * Integer.BYTES) > 0) {
+				return new PageId(this.relDef.getFileIdx(), i);
+			}
+		}
+		throw new RuntimeException("No available page");
+
+	}
+
 }
