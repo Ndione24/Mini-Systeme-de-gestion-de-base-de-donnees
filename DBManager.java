@@ -38,6 +38,8 @@ public class DBManager {
 	public void init() {
 		// Appel à la methode init de la classe DBDef
 		DBDef.getINSTANCE().init();
+		//appel de la methode init() de la classe HeapFile
+		FileManager.getInstance().init();
 
 	}
 
