@@ -1,22 +1,29 @@
 package projetBdd;
 //for a page
 public class DataPage {
-//slotCount le nombre de cases sur une page de données. 
-	private int slotCount;
+//id de la page
+	private int idxDeLaPage;
 //nbre de cases dispo
 	private int freeSlots;
 	
 	public DataPage() {
-		this.slotCount=0;
+		this.idxDeLaPage=0;
 		this.freeSlots=0;
 	}
-
-	public int getSlotCount() {
-		return slotCount;
+	/**
+	 * constructeur 2
+	 */
+	public DataPage(int idxDeLaPage,int freeSlots) {
+		this.idxDeLaPage=idxDeLaPage;
+		this.freeSlots=freeSlots;
 	}
 
-	public void setSlotCount(int slotCount) {
-		this.slotCount = slotCount;
+	public int getIdxDeLaPage() {
+		return this.idxDeLaPage;
+	}
+
+	public void setIdxDeLaPage(int idx) {
+		this.idxDeLaPage = idx;
 	}
 
 	public int getFreeSlots() {
