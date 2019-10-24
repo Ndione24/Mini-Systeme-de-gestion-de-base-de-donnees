@@ -117,5 +117,32 @@ public class HeapFile {
 		throw new RuntimeException("No available page");
 
 	}
+	
+	/**
+	 * 
+	 * @param pageId le pageId
+	 * @return tous les records qui se trouvent dans cette pageId
+	 */
+	public List<Record> listeDesRecords(PageId pageId){
+		//je recupère le headerpage
+		byte[] hp =BufferManager.getInstance().getPage(pageId);
+		
+		ByteBuffer bb = ByteBuffer.wrap(hp);
+		HeaderPage headerPage = new HeaderPage();
+		headerPage.setRelDef(this.relDef);
+		headerPage.readFromBufferToHeaderPage(hp);
+		List<Record> listeRec = new ArrayList<Record>();
+		
+		//on regarde dans la liste des datatpages
+		//de headerPage si pageId.idx ==DataPage.idxDeLaPage
+		for(int i=0;i<this.relDef.getSlotCount();i++) {
+			//si le slot contient 1 record
+			if(bb.get()==(byte)1) {
+				listeRec.add(headerPage.readRecordFromBuffer(hp, i));
+			}
+		}
+		return listeRec;
+	}
+
 
 }
