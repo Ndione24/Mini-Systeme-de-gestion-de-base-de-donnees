@@ -50,4 +50,12 @@ public class PageId {
 	public String toString() {
 		return " " + fileIdx + " " + pageIdx;
 	}
+/**
+ * 
+ * @param pageId comparer à ce pageId
+ * @return vraie s'ils ont la même reference
+ */
+	public boolean equals(PageId pageId) {
+		return this == pageId;
+	}
 }
