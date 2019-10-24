@@ -12,6 +12,11 @@ public class HeapFile {
 		this.relDef=relDef;
 	}
 	
+	// getters pour recuperer le nom de la relation dans HeapFile
+	public String nomRelation() {
+		return this.relDef.getNomRelation();
+	}
+	
 	
 	public void createNewOnDisk()
 	{
