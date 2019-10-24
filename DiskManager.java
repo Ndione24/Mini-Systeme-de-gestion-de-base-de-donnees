@@ -50,13 +50,14 @@ public class DiskManager {
 
 	}
 
-	public PageId addPage(int fileIdx, PageId pageId) {
+	public PageId addPage(int fileIdx) {
+		PageId pageId = new PageId();
 		// variable dans laquelle sera stockée l'identifiant de la page
 		int idDeLaPage = 0;
 
 		try {
 			// ouverture du fichier en mode lecture et écriture
-			RandomAccessFile file = new RandomAccessFile("../../DB/" + "Data_" + fileIdx + ".rf", "rw");
+			RandomAccessFile file = new RandomAccessFile(Constants.CHEMINDB + "Data_" + fileIdx + ".rf", "rw");
 
 			// Positionner le curseur à la fin du fichier
 			file.seek(file.length());
@@ -97,7 +98,7 @@ public class DiskManager {
 
 		try {
 			// ouverture du fichier en mode lecture
-			RandomAccessFile file = new RandomAccessFile("../../DB/" + "Data_" + idDeLaPage.getFileIdx() + ".rf", "rw");
+			RandomAccessFile file = new RandomAccessFile("../../DB/" + "Data_" + idDeLaPage.getFileIdx() + ".rf", "r");
 
 			// Positionner le curseur sur la page à lire
 			file.seek(idDeLaPage.getPageIdx() * (Constants.PAGESIZE));
@@ -126,7 +127,7 @@ public class DiskManager {
 			// Positionner le curseur sur la page à lire
 			file.seek(idDeLaPage.getPageIdx() * (Constants.PAGESIZE));
 
-			// Lire la page dans le buffer
+			// Ecrire la page dans le buffer
 			file.write(buffer);
 
 			// Fermeture du fichier
