@@ -143,6 +143,24 @@ public class HeapFile {
 		}
 		return listeRec;
 	}
+	
+	/*
+	 * @record la relation a inserer 
+	 * cette methode doit inserer un record dans la relation
+	 */
+	
+	public Rid insertRecord(Record record) {
+		
+	}
+	
+	/*
+	 * la methode doit lister tous les records dans HeapFile
+	 */
+	public ArrayList<Record> getAllRecords(){
+		
+	}
+
+}
 
 
 }
