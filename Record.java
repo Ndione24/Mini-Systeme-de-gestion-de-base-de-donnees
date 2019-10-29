@@ -11,7 +11,7 @@ public class Record {
 	private RelDef relDef;
 	// cette variable values correspond aux valeurs du record.
 	private List<String> values;
-	// Cette variable contriendra les types des colonnes de la relation
+	// Cette variable contriendra les types des colonnes de la relation relDef
 	List<String> typesValues = new ArrayList<String>();
 
 	/**
@@ -120,22 +120,45 @@ public class Record {
 	 * l’autre, à partir de position.
 	 */
 
-	public void readFromBuffer(ByteBuffer buff, int position) {
+	public void readFromBuffer(byte[] buff, int position) {
 
-		// On converti le buffer en String
-		String s = Arrays.toString(buff.array());
-		//on supprimme les espaces et virgules
-		StringTokenizer st = new StringTokenizer(s, ", [ ]");
-		StringBuilder sb = new StringBuilder();
-		while (st.hasMoreTokens()) {
-			sb.append(st.nextToken());
-		}
-		sb.toString();
-		// on affiche à partir de la position
-		for (int i = position; i < sb.length(); i++) {
-			System.out.print(sb.charAt(i));
-		}
+		// on calcul de la position de lecture
+		int pos = relDef.getSlotCount() + (position * relDef.getRecordSize());
+		// on lit les données dans le buffer à partir de cette position
+		ByteBuffer bf = ByteBuffer.wrap(buff, pos, buff.length - pos);
+		// Parcours de la liste ReIDef pour vérifier le type des colonnes
+		for (int i = 0; i < relDef.getNbColonnes(); i++) {
 
+			// si la colonne est de type entier
+			if ((relDef.getTypesColonnes().get(i).equals("int"))) {
+				// on ajoute l'entier dans la liste des records
+				values.add(""+bf.getInt());
+			}
+
+			// si la colonne est de type float
+			else if (relDef.getTypesColonnes().get(i).equals("float")) {
+				// Lire et Ajouter le float dans la liste
+				values.add("" + bf.getFloat());
+			}
+            
+			// si la colonne est de type String
+			else {
+				// on récupère la taille de la chaine
+				String str = (relDef.getTypesColonnes().get(i)).replace("string", "").trim();
+
+				// Utilisation de StringBuilder pour Récupérer la chaine
+				StringBuilder sb = new StringBuilder();
+
+				// on parcour la chaine
+				for (int j = 0; j < Integer.parseInt(str); j++) {
+					//on lit et ajoute carac par carac dans le StringBuilder
+					sb.append((char) (bf.getChar()));
+				}
+
+				// on met  le contenu de StringBuilder dans la liste
+				values.add(sb.toString());
+			}
+		}
 	}
 
 }// fin de la classe
