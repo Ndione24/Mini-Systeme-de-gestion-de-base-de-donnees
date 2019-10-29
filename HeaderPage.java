@@ -74,7 +74,7 @@ public class HeaderPage {
 		byteBuffer.putInt(dataPageCount);
 
 		/*
-		 * Boucle pour récupérer la liste DataPage(couple de pageIdx et freeSlots) dans
+		 * Boucle pour récupérer la liste DataPage dans
 		 * la HeaderPageInfo
 		 */
 		for (int i = 0; i < dataPageCount; i++) {
