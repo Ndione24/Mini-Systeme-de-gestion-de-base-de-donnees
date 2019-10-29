@@ -128,34 +128,45 @@ public class HeapFile {
 	 * @param pageId le pageId
 	 * @return tous les records qui se trouvent dans cette pageId
 	 */
-	public List<Record> listeDesRecords(PageId pageId){
-		//je recupère le headerpage
-		byte[] hp =BufferManager.getInstance().getPage(pageId);
-		
+	public List<Record> getRecordsInDataPage(PageId pageId) {
+		// je recupère le headerpage
+		byte[] hp = BufferManager.getInstance().getPage(pageId);
+
 		ByteBuffer bb = ByteBuffer.wrap(hp);
-		HeaderPage headerPage = new HeaderPage();
-		headerPage.setRelDef(this.relDef);
-		headerPage.readFromBufferToHeaderPage(hp);
+
 		List<Record> listeRec = new ArrayList<Record>();
-		
-		//on regarde dans la liste des datatpages
-		//de headerPage si pageId.idx ==DataPage.idxDeLaPage
-		for(int i=0;i<this.relDef.getSlotCount();i++) {
-			//si le slot contient 1 record
-			if(bb.get()==(byte)1) {
-				listeRec.add(headerPage.readRecordFromBuffer(hp, i));
+		// parcour du bytemap
+		for (int i = 0; i < this.relDef.getSlotCount(); i++) {
+			// si le slot contient 1 record
+			if (bb.get() == (byte) 1) {
+				Record rec = new Record(this.relDef);
+				rec.readFromBuffer(hp, i);
+				listeRec.add(rec);
 			}
 		}
 		return listeRec;
 	}
-	
-	/*
-	 * @record la relation a inserer 
-	 * cette methode doit inserer un record dans la relation
+
+	/**
+	 * cette methode insère un record dans une page qui a des slots libres et
+	 * retourne son rid
 	 */
-	
-	public Rid insertRecord(Record record) {
-		
+	Rid insertRecord(Record record) {
+		// on recupère une page libre
+		PageId pageAvecSlotsLibre = getFreeDataPageId();
+		// j'ecris le record dans la page libre que l'on vient de récuperer
+		writeRecordToDataPage(record, pageAvecSlotsLibre);
+		// je dois mettre à jour le header page
+		HeaderPage hp = new HeaderPage();
+		// je recupère le headerpage associé à pageLibre
+		hp.readFromBufferToHeaderPage(BufferManager.getInstance().getPage(pageAvecSlotsLibre));
+		// je doit mettre à jour le headerpage apres insertion
+
+		// je cree le rid à retourner avec les bonne valeurs(pagelibre et slot 0 de
+		// cette page)
+		Rid rid = new Rid(pageAvecSlotsLibre, 0);
+
+		return rid;
 	}
 	
 	/*
