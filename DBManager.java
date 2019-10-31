@@ -162,17 +162,10 @@ public class DBManager {
 		//on recupere la liste des RelDef
 		ArrayList<RelDef> listrelDef = new ArrayList<RelDef>();
 		listrelDef = DBDef.getINSTANCE().getListeRelDef();
-		//la liaison pour recuperer les slotCount
-		RelDef relDef = new RelDef();
-		int i = 0;
 		//on parcour et compare si le nom de la relation est dans la liste
 		for (RelDef relDef1 : listrelDef) {
 			if (relDef1.getNomRelation() == nomRelation) {
-				//recherche un slot libre
-				for (int j=0; j<relDef.getSlotCount(); j++) {
-					if (/*si le bitmap est libre */)
-						//inserer
-				}
+				
 			}else {
 				System.out.println("le nom de la relation n'existe pas");
 			}
