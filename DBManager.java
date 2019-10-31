@@ -151,4 +151,33 @@ public class DBManager {
 		DBDef.getINSTANCE().addRelation(relation);
 
 	}
+	
+	/*
+	 * la methode doit inserer une relation 
+	 * @param nomRelation represente le nom de la relation
+	 * @param valeurDeLaRelation represente une liste de(s) la  valeur(s) de la relation
+	 */
+	
+	public void insertRelation(String nomRelation, List<String> valeurDeLaRelation) {
+		//on recupere la liste des RelDef
+		ArrayList<RelDef> listrelDef = new ArrayList<RelDef>();
+		listrelDef = DBDef.getINSTANCE().getListeRelDef();
+		//la liaison pour recuperer les slotCount
+		RelDef relDef = new RelDef();
+		int i = 0;
+		//on parcour et compare si le nom de la relation est dans la liste
+		for (RelDef relDef1 : listrelDef) {
+			if (relDef1.getNomRelation() == nomRelation) {
+				//recherche un slot libre
+				for (int j=0; j<relDef.getSlotCount(); j++) {
+					if (/*si le bitmap est libre */)
+						//inserer
+				}
+			}else {
+				System.out.println("le nom de la relation n'existe pas");
+			}
+		}
+		
+		
+	}
 }
