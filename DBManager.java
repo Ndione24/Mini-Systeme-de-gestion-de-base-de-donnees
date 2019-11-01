@@ -190,25 +190,35 @@ public class DBManager {
 		FileManager.getInstance().reset();
 		DBDef.getINSTANCE().reset();
 	}
-	/*
-	 * la methode doit inserer une relation 
-	 * @param nomRelation represente le nom de la relation
-	 * @param valeurDeLaRelation represente une liste de(s) la  valeur(s) de la relation
-	 */
 	
-	public void insertCommand(String nomRelation, List<String> valeurDeLaRelation) {
-		//on recupere la liste des RelDef
-		ArrayList<RelDef> listrelDef = new ArrayList<RelDef>();
-		listrelDef = DBDef.getINSTANCE().getListeRelDef();
-		//on parcour et compare si le nom de la relation est dans la liste
-		for (RelDef relDef1 : listrelDef) {
-			if (relDef1.getNomRelation() == nomRelation) {
-				
-			}else {
-				System.out.println("le nom de la relation n'existe pas");
-			}
+		/**
+	 * la methode doit inserer une relation 
+	 * @param nomRelation : nom de la relation auquel on doit inserer un record 
+	 * @param values : les valeures du record à inserer
+	 */
+	public void insertCommand(String nomRelation,ArrayList<String> values) 
+	{
+		String nomRelationLowerCase=nomRelation.toLowerCase();
+		
+		//on cherche le nom de la relation dans le FileManager 
+		for(int i=0;i<FileManager.getInstance().getAllHeapFile().size();i++)
+		{
+		if(FileManager.getInstance().getAllHeapFile().get(i).getRelDef().getNomRelation().toLowerCase().equals(nomRelationLowerCase)) 
+		{
+			//si le nom de la relation a ete trouvé, on cree un nouveau record et on l'insere
+			Record newRecord= new Record(DBDef.getINSTANCE().listeRelDef.get(i),values);
+			
+			FileManager.getInstance().getAllHeapFile().get(i).InsertRecord(newRecord);
+			break;
+			
+			
+		}
 		}
 		
-		
 	}
+	
+	
+	
+	
+	
 }
