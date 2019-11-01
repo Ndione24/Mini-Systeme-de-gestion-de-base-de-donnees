@@ -152,13 +152,51 @@ public class DBManager {
 
 	}
 	
+	
+	
+	/**
+	*Cette methode supprime tous les fichiers .rf du repertoire DB ainsi que le fichier Catalog.def
+	*/
+	public void cleanCommand() 
+	{
+		
+		//le repertoire DB
+		File repertoire= new File(Constantes.CHEMINDB);
+		
+		//on met tous les fichiers du repertoire DB dans un tableau de fichiers 
+		File[] lesFichiers=repertoire.listFiles();
+		
+		
+		//on supprime tous les fichiers .rf ainsi que le fichier Catatog.def
+		
+		for(File key : lesFichiers)
+		{
+		//on supprime les fichiers dont le chemin se termine par ".rf" ou "Catalog.def"
+			if(key.getAbsolutePath().endsWith(".rf") || key.getAbsolutePath().endsWith("Catalog.def")) {
+				if(key.delete())
+				{
+					System.out.println(" le fichier "+ key+ " a été bien supprimé");
+				}
+				else 
+				{
+					System.out.println("Error: le fichier "+ key+ " n'a pas été supprimé");
+				}
+		    }
+		}
+		//System.out.println(Arrays.toString(lesFichiers));
+		
+		
+		BufferManager2.getInstance().reset();
+		FileManager.getInstance().reset();
+		DBDef.getINSTANCE().reset();
+	}
 	/*
 	 * la methode doit inserer une relation 
 	 * @param nomRelation represente le nom de la relation
 	 * @param valeurDeLaRelation represente une liste de(s) la  valeur(s) de la relation
 	 */
 	
-	public void insertRelation(String nomRelation, List<String> valeurDeLaRelation) {
+	public void insertCommand(String nomRelation, List<String> valeurDeLaRelation) {
 		//on recupere la liste des RelDef
 		ArrayList<RelDef> listrelDef = new ArrayList<RelDef>();
 		listrelDef = DBDef.getINSTANCE().getListeRelDef();
