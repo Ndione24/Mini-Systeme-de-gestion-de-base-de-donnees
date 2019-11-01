@@ -295,7 +295,34 @@ public class DBManager {
 	}
 	
 	
+		public void selectCommand(String nomRelation,int indiceColonne,String valeur) 
+	{
+		//on recupere la liste des records selectionnés
+		ArrayList<Record> recordSelectione=FileManager.getInstance().SelectFromRelation(nomRelation, indiceColonne, valeur);
 	
+		int nb=0;
+		for(Record item: recordSelectione) 
+		{
+			String ligneRecord="";
+			for (int j=0;j<item.getValues().size();j++)
+			{
+				if(j==(item.getValues().size()-1))
+				{
+					//pour eviter d'avoir un point virgule à la fin du record
+					ligneRecord=ligneRecord+item.getValues().get(j);
+				}
+				else 
+				{
+					ligneRecord=ligneRecord+item.getValues().get(j)+";";
+				}
+			}
+			
+			System.out.println("record n°"+(nb+1)+ " "+ligneRecord);
+			nb++;
+		}
+		
+		System.out.println("Total records = "+nb);
+	}
 	
 	
 }
