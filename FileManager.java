@@ -28,6 +28,22 @@ public class FileManager {
 			}
 		}
 		
+	
+	
+	public void CreateRelationFile (RelDef relDef) 
+	{
+		//créer un nouvel objet de type HeapFile et lui attribuer relDef
+		HeapFile hp= new HeapFile(relDef);
+		
+		//le rajouter à la liste heapFiles
+		this.addHeapFile(hp);
+		
+		//puis appeler sur cet objet la méthode createNewOnDisk.
+		
+		hp.createNewOnDisk();
+		
+		
+	}
 		/*
 		 * @param record la relation a inserer
 		 * @param relName le nom correspondant au record a inserer
