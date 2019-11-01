@@ -43,5 +43,72 @@ public class FileManager {
 			return null;
 			
 		}
+	
+	public ArrayList<Record> SelectAllFromRelation(String relName)
+	{
+		//on parcours HeapFiles pour selectionner le record de nom RelName
+		
+		HeapFile laRelation;
+		
+		boolean cherche=false;
+		
+		
+		
+		for(int i=0;i<this.heapFiles.size();i++) 
+		{
+			if(this.heapFiles.get(i).nomRelation().equals(relName)) 
+			{
+				return this.heapFiles.get(i).GetAllRecords();
+				
+			}
+			
+		}
+		
+	
+		return null;
+	
+		
+		
+		
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public ArrayList<Record> SelectFromRelation(String relName, int idxCol, String valeur) 
+	{
+		
+		
+	
+		ArrayList<Record> listeDeRecordsSelectionner=new ArrayList<>();
+		boolean cherche=false;
+		
+		//on verifie si la relation extiste
+		for(int i=0;i<this.heapFiles.size();i++) 
+		{
+			if(this.heapFiles.get(i).nomRelation().equals(relName)) 
+			{
+				
+				
+				//si la valeur de du record à la colonne idxCol est égal à valeur, on l'insere la liste qu'on doit retourner
+				if(this.heapFiles.get(i).GetAllRecords().get(i).getValues().get(idxCol).equals(valeur)) 
+				{
+				 listeDeRecordsSelectionner.add(this.heapFiles.get(i).GetAllRecords().get(i));
+				}
+					
+					
+			}
+			
+			
+		}
+		
+		
+		
+		return listeDeRecordsSelectionner;
+		
+	
+	}
+	
 
 }
