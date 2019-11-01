@@ -74,9 +74,13 @@ public class Record {
 	public void writeToBuffer(ByteBuffer buff, int position) {
 		// On recupere les types de colonnes de RelDef
 		typesValues = relDef.getTypesColonnes();
-		// on boucle à partir de position
+		
 		// jusqu'à la fin du tableau values
-		for (int i = position; i < this.values.size(); i++) {
+		
+		//on met la position du curseur à la position " position " donnée		
+		buff.position(position);
+		
+		for (int i = 0; i < this.values.size(); i++) {
 			// je verifie le type des valeurs puis
 			// je le stocke dans le buffer sous forme de string
 
