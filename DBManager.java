@@ -218,6 +218,83 @@ public class DBManager {
 	}
 	
 	
+	public void insertAllCommand(String nomRelation,String nomFichierCsv) 
+	{
+	
+	
+		//chemin du fichier
+		String cheminFileCsv=Constantes.CHEMINRACINE+nomFichierCsv;
+		
+		String ligne=null;
+		
+		
+		try {
+			BufferedReader br= new BufferedReader(new FileReader (cheminFileCsv));
+			
+			//ligne est une chaine de caratere correspondant à une ligne( un record) du fichier CSV
+			while((ligne=br.readLine())!=null)
+			{
+				ArrayList<String> values =new ArrayList<>();
+				//les valeurs du record sont separé par une virgule
+				StringTokenizer st = new StringTokenizer(ligne,",");
+				 while (st.hasMoreTokens()) {  
+			         values.add(st.nextToken());
+			     }
+				 insertCommand(nomRelation,values);
+				 
+			}
+			
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void selectAllCommand(String nomRelation) 
+	{
+		String nomRelationLowerCase=nomRelation.toLowerCase();
+		//on cherche le nom de la relation dans le FileManager 
+		for(int i=0;i<FileManager.getInstance().getAllHeapFile().size();i++)
+		{
+		if(FileManager.getInstance().getAllHeapFile().get(i).getRelDef().getNomRelation().toLowerCase().equals(nomRelationLowerCase)) 
+		{
+			//on recupere la liste de record associée à cette relation
+			List<Record> listDeRecords=FileManager.getInstance().getAllHeapFile().get(i).GetAllRecords();
+			
+			//on affiche maintenant les valeurs des records separés par un point virgule
+			
+			int nb=0;
+			for(Record item: listDeRecords) 
+			{
+				String ligneRecord="";
+				for (int j=0;j<item.getValues().size();j++)
+				{
+					if(j==(item.getValues().size()-1))
+					{
+						//pour eviter d'avoir un point virgule à la fin du record
+						ligneRecord=ligneRecord+item.getValues().get(j);
+					}
+					else 
+					{
+						ligneRecord=ligneRecord+item.getValues().get(j)+";";
+					}
+				}
+				
+				System.out.println("record n°"+(nb+1)+ " "+ligneRecord);
+				nb++;
+			}
+			
+			System.out.println("Total records = "+nb);
+			
+			}
+		}
+		
+	}
+	
+	
 	
 	
 	
