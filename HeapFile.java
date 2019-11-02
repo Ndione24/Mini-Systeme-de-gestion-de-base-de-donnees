@@ -161,10 +161,10 @@ public class HeapFile {
 		// je recupère le headerpage associé à pageLibre
 		hp.readFromBufferToHeaderPage(BufferManager.getInstance().getPage(pageAvecSlotsLibre));
 		// je doit mettre à jour le headerpage apres insertion
-
+        int slotIdx=((DataPage)hp).getIdxDeLaPage();
 		// je cree le rid à retourner avec les bonne valeurs(pagelibre et slot 0 de
 		// cette page)
-		Rid rid = new Rid(pageAvecSlotsLibre, 0);
+		Rid rid = new Rid(pageAvecSlotsLibre, slotIdx);
 
 		return rid;
 	}
