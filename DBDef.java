@@ -135,4 +135,13 @@ public class DBDef implements Serializable {
 	public ArrayList<RelDef> getListeRelDef() {
 		return this.listeRelDef;
 	}
+	
+	/**
+	 * on remet le compteur à 0 et on vide la liste de RelDef
+	 */
+	public void reset() 
+	{
+		this.compteur=0;
+		this.listeRelDef.clear();
+	}
 }
