@@ -162,9 +162,32 @@ public class HeapFile {
 	/*
 	 * la methode doit lister tous les records dans HeapFile
 	 */
-	public ArrayList<Record> getAllRecords(){
+		public ArrayList<Record> getAllRecords()
+		{
+			ArrayList<Record> listeDeRecords= new ArrayList<>();
+			
+			int fileIdx=this.relDef.getFileIdx();
+			
+			//on recupere la headerpage
+			
+			PageId hpId=new PageId(fileIdx,0);
+			
+			byte[] buff =BufferManager2.getInstance().getPage(hpId);
+			//il nous faut le nombre de page dse trouvant dans la headerPage
+			HeaderPage hp= new HeaderPage(hpId);
+			hp.setHpBuffer(buff);
 		
-	}
+			
+			//i=1 car pageId 0 correspond à la headerPage
+			for(int i=1;i<hp.getDataPageCount();i++) 
+			{
+				PageId pg =new PageId(this.relDef.getFileIdx(),i);
+				listeDeRecords.addAll(getRecordsInDataPage(pg));
+			}
+			
+			
+			return listeDeRecords;
+		}
 
 }
 
