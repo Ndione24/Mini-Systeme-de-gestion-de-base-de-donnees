@@ -145,5 +145,12 @@ public class FileManager {
 	
 	}
 	
+     /**
+     * on vide la liste de heapFile
+     */
+    public void reset()
+    {
+    	this.heapFiles.clear();
+    }
 
 }
