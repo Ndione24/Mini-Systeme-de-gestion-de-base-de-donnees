@@ -1,92 +1,106 @@
-package projetBdd;
+package DataBase;
 
-import java.nio.ByteBuffer;
-import java.util.*;
-//for all pages
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class HeaderPage {
-	RelDef relDef;
-	// le nombre de pages dans un fichier
-	private int dataPageCount;
-	// liste des pages et leur nombre de slots libre
-	private List<DataPage> listeDataPages;
-
-	public HeaderPage() {
-		this.dataPageCount = 0;
-		this.listeDataPages = new ArrayList<DataPage>();
+	
+	private PageId page;
+	private ArrayList<Byte> hp;
+	private ArrayList<DataPage> datapage;
+	
+	public HeaderPage(PageId page){
+		this.page=page;
+		this.hp=new ArrayList<>();
+		this.datapage=new ArrayList<>();
 	}
-
-	public RelDef getRelDef() {
-		return this.relDef;
+	
+	
+	
+	//remplace le contenu de la headerpage
+	public void setHpBuffer(byte [] buffer) 
+	{
+		ArrayList newHp = new ArrayList(Arrays.asList(buffer));
+		this.hp=newHp;
+		
 	}
-
-	public void setRelDef(RelDef relDef) {
-		this.relDef = relDef;
+	
+	
+	public byte[] getBuffer() 
+	{
+		Byte [] buff= new Byte[this.hp.size()];
+		buff=this.hp.toArray(buff);
+		
+		String buf=buff.toString();
+		return null;
 	}
+	
+	
 
-	public int getDataPageCount() {
-		return dataPageCount;
+	public void addDataPageToHeaderPager(DataPage data) 
+	{
+		this.datapage.add(data);
 	}
-
-	public void setDataPageCount(int dataPageCount) {
-		this.dataPageCount = dataPageCount;
+	
+	public void incrementeDataPageCount() 
+	{
+		byte currentValue=this.hp.get(0);
+		byte nextValue=(byte) (currentValue+1);
+		this.hp.set(0, nextValue) ;
 	}
-
-	public List<DataPage> getListeDataPages() {
-		return listeDataPages;
+	
+	
+	public void decrementeDataPageCount() 
+	{
+		byte currentValue=this.hp.get(0);
+		byte nextValue=(byte) (currentValue-1);
+		this.hp.set(0, nextValue) ;
 	}
-
-	public void setListeDataPages(List<DataPage> listeDataPages) {
-		this.listeDataPages = listeDataPages;
+	
+	
+	public void incrementeFreeSlotDataPage(int position)
+	{
+		byte currentValue=this.hp.get(position);
+		byte nextValue=(byte) (currentValue+1);
+		this.hp.set(position, nextValue);
 	}
-
-	/**
-	 * methode pour mettre le buffer dans le HeaderPage
-	 */
-	public void readFromBufferToHeaderPage(byte[] buffer) {
-		// Utilisation de ByteBuffer pour lire les données dans le buffer
-		ByteBuffer byteBuffer = ByteBuffer.wrap(buffer);
-
-		// Récupérer le nombre de pages
-		dataPageCount = byteBuffer.getInt();
-
-		// Parcours de la liste DataPage(couple page et freeslots)
-		for (int i = 0; i < dataPageCount; i++) {
-			// Récupérer la DataPage
-			DataPage data = new DataPage(byteBuffer.getInt(), byteBuffer.getInt());
-
-			// Ajout de la DataPage dans la liste
-			listeDataPages.add(data);
-		}
+	
+	
+	public void decrementeFreeSlotDataPage(int position)
+	{
+		byte currentValue=this.hp.get(position);
+		byte nextValue=(byte) (currentValue-1);
+		this.hp.set(position, nextValue);
 	}
-
-	/**
-	 * ecrire le contenu du header Page dans le buffer
-	 *
-	 * @param buffer buffer dans lequel sera ecrit le content de headerpage Buffer
-	 *               dans laquel sera écrit la HeaderPageInfo
-	 */
-	public void writeHeaderPageToBuffer(byte[] buffer) {
-		// on utilise bytebuffer pour écrire les données dans le buffer
-		ByteBuffer byteBuffer = ByteBuffer.wrap(buffer);
-
-		// Récupérer le nombre de pages
-		byteBuffer.putInt(dataPageCount);
-
-		/*
-		 * Boucle pour récupérer la liste DataPage dans
-		 * la HeaderPageInfo
-		 */
-		for (int i = 0; i < dataPageCount; i++) {
-			// Recupération d'une pageIdx et insertion dans le Bytebuffer
-			byteBuffer.putInt(listeDataPages.get(i).getIdxDeLaPage());
-
-			// Recupération d'un freeSlots et insertion dans le Bytebuffer
-			byteBuffer.putInt(listeDataPages.get(i).getFreeSlots());
-		}
-		// Mettre le contenu du ByteBuffer dans le buffer
-		buffer = byteBuffer.array();
+	
+	public void setFreeSlotDataPage(int position,byte value)
+	{
+		this.hp.set(position, value);
 	}
-
-
+	
+	//Quand une nouvelle page de donnée  est ajouté, on incremente le nombre de page
+	//dans le fichier et on ajoute son slot dans le dans la headerPage 
+	public void updateHeaderPageWhenAddDataPage(int freeSlotCount)
+	{	
+		
+		incrementeDataPageCount();
+		byte toByte=(byte)freeSlotCount;
+		this.hp.add(toByte);
+	}
+	
+	public void updateHeaderPageWhenWriteRecordToDataPage(int position)
+	{	
+		this.datapage.get(position).decrementeFreeSlots();
+		
+	}
+	
+	
+	
+	//retourne le nombre de page dans le fichier
+	public byte getDataPageCount() 
+	{
+		return this.hp.get(0);
+	}
+	
+	
 }
