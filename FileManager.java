@@ -56,6 +56,13 @@ public class FileManager {
 		
 		
 	}
+	
+	
+	public void addHeapFile(HeapFile hp) 
+    	{
+    		this.heapFiles.add(hp);
+    	}
+	
 		/*
 		 * @param record la relation a inserer
 		 * @param relName le nom correspondant au record a inserer
