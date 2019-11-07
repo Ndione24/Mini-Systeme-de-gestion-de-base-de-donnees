@@ -29,6 +29,18 @@ public class FileManager {
 		}
 		
 	
+	/**
+	*@return la liste des des heapFile
+	*/
+	public ArrayList<HeapFile> getAllHeapFile()
+	{
+		ArrayList<HeapFile> ah= new ArrayList<>();
+		for(HeapFile key: this.heapFiles) 
+		{
+			ah.add(key);
+		}
+		return ah;
+	}
 	
 	public void CreateRelationFile (RelDef relDef) 
 	{
