@@ -526,6 +526,19 @@ public class BufferManager2 {
 			this.pagesLRU.clear();
 
 		}
+	
+		/**
+		 * methode qui renitialise completement le bufferPool
+		 */
+		
+		public void reset() 
+		{
+			for(Frame frame: this.bufferpool) 
+			{
+				frame.renitialiser();
+			}
+			
+		}
 
 	
 
