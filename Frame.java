@@ -1,4 +1,4 @@
-package projetBdd;
+package DataBase;
 
 public class Frame {
 	// buffer associé à cette case
@@ -22,25 +22,35 @@ public class Frame {
 		flagDirty = 0;
 		estCharge = false;
 	}
+	
+	public Frame(PageId page) {
+		this.buffer = new byte[Constants.PAGESIZE];
+		this.idDeLaPage = page;//AR
+		this.pin_count = 1;
+		this.flagDirty = 0;
+		this.estCharge = true;
+	}
 
 	/**
 	 * Ce constructeur met à jour les attributs buffer et pageId
 	 * 
 	 * @param buffer Représente le buffer
 	 * @param pageId : id de la page
-	 * 
+	 * ssr
 	 */
+	
 	public Frame(byte[] buffer, PageId pageId) {
 		this.buffer = buffer;
 		pin_count = 0;
 		flagDirty = 0;
 		this.idDeLaPage = pageId;
-		estCharge = false;
+		estCharge = true;
 	}
+	
 
 	// gettes and setters
 	public byte[] getBuffer() {
-		return buffer;
+		return this.buffer;
 	}
 
 	public void setBuffer(byte[] buffer) {
@@ -104,4 +114,35 @@ public class Frame {
 	public void decrementerFlagDirty() {
 		this.flagDirty--;
 	}
+
+	public void allInfoFrame() 
+	{
+		System.out.println("chargement "+this.estCharge);
+		System.out.println("dirty "+this.flagDirty);
+		System.out.println("pincount "+this.pin_count);
+		System.out.println("PageId "+this.idDeLaPage.getPageIdx());
+		System.out.println("PageId "+this.idDeLaPage.getFileIdx());
+		System.out.println("Contenu du Buffer");
+		
+		for(byte a: this.buffer) 
+		{
+			System.out.print(a+" ");
+			
+		}
+		
+	}
+	/**
+	 * methode qui renitialise de nouveau une Frame
+	 */
+	public void renitialiser() 
+	{
+		buffer = new byte[Constants.PAGESIZE];
+		idDeLaPage = null;
+		pin_count = 0;
+		flagDirty = 0;
+		estCharge = false;
+	}
+	
+	
 }
+
