@@ -68,7 +68,46 @@ public class HeapFile {
 		}
 		
 		
+		
+		
+		
 	}
+	
+	
+		
+		public PageId addDataPage() throws IOException{
+			//l'indice du fichier 
+			int fileIdx=this.relDef.getFileIdx();
+			
+			//on ajoute une nouvelle page au fichier
+			
+			PageId nouvellePage=DiskManager.getInstance().addPage(fileIdx);
+			
+			PageId headerpage= new PageId(fileIdx,0);
+			
+			HeaderPage hp= new HeaderPage(headerpage);
+			
+			//on recupere le buffer de la headerpage
+			byte[] buffer=BufferManager2.getInstance().getPage(headerpage);
+			
+			//on l'affecte à hp pour pouvoir actualiser les informations
+			hp.setHpBuffer(buffer);
+			//actualiser les informations de la Header Page.
+			
+			//on cree la dataPage de la page  nouvellement crée et on l'ajoute dans la headerPage
+			DataPage pg=new DataPage(nouvellePage,this.relDef);
+			hp.addDataPageToHeaderPager(pg);
+			hp.updateHeaderPageWhenAddDataPage(pg.getFreeSlots());
+			
+			//on actualise la headerpage maintenant dans le disque
+			DiskManager.getInstance().writePage(headerpage, hp.getBuffer());
+			
+			BufferManager2.getInstance().freePage(nouvellePage,1);
+			
+			
+			return nouvellePage;
+			
+		}
 	/**
 	 * 
 	 * @param record
