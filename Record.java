@@ -5,9 +5,10 @@ import java.util.StringTokenizer;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 
 public class Record {
-//cette varibale reldef correspond à la relation à laquelle «appartient» le record
+//cette varibale reldef correspond Ã  la relation Ã  laquelle Â«appartientÂ» le record
 	private RelDef relDef;
 	// cette variable values correspond aux valeurs du record.
 	private List<String> values;
@@ -25,8 +26,8 @@ public class Record {
 	}
 
 	/**
-	 * 2ème constructeur qui initialise les attributs en fonction des variables
-	 * passés en paramètre
+	 * 2Ã¨me constructeur qui initialise les attributs en fonction des variables
+	 * passÃ©s en paramÃ¨tre
 	 */
 
 	public Record(RelDef relDef, List<String> values) {
@@ -67,19 +68,21 @@ public class Record {
 	}
 
 	/**
-	 * methode qui devra écrire les valeurs du Record dans le buffer, l’une après
-	 * l’autre, à partir de position.
+	 * methode qui devra Ã©crire les valeurs du Record dans le buffer, lâ€™une
+	 * aprÃ¨s lâ€™autre, Ã  partir de position.
 	 */
 
 	public void writeToBuffer(ByteBuffer buff, int position) {
+
+		// on calcul de la position de lecture
 		// On recupere les types de colonnes de RelDef
 		typesValues = relDef.getTypesColonnes();
-		
-		// jusqu'à la fin du tableau values
-		
-		//on met la position du curseur à la position " position " donnée		
+
+		// jusqu'Ã  la fin du tableau values
+
+		// on met la position du curseur Ã  la position " position " donnÃ©e
 		buff.position(position);
-		
+
 		for (int i = 0; i < this.values.size(); i++) {
 			// je verifie le type des valeurs puis
 			// je le stocke dans le buffer sous forme de string
@@ -109,10 +112,16 @@ public class Record {
 			}
 			// On verifie si c'est un string
 			if (typesValues.get(i).equals("string")) {
-				// variable intermediaire (interm)pour convertir le type
-				// avant de le mettre dans le buffer
-				String interm = values.get(i);
-				buff.put(ByteBuffer.wrap(interm.getBytes()));
+				// on rÃ©cupÃ¨re la taille de la chaine
+				String str = (relDef.getTypesColonnes().get(i)).replace("string", "").trim();
+				int tailleDeLaChaine = Integer.parseInt(str);
+				for(int j=0;j<tailleDeLaChaine;j++) {
+					String interm = values.get(j);
+					for(int k=0;k<interm.length();k++)
+					buff.putChar(interm.charAt(k));
+				}
+
+				
 			}
 
 		} // fin boucle for
@@ -120,23 +129,23 @@ public class Record {
 	}
 
 	/**
-	 * cette methode devra lire les valeurs du Record depuis le buffer, l’une après
-	 * l’autre, à partir de position.
+	 * cette methode devra lire les valeurs du Record depuis le buffer, lâ€™une
+	 * aprÃ¨s lâ€™autre, Ã  partir de position.
 	 */
 
 	public void readFromBuffer(byte[] buff, int position) {
 
 		// on calcul de la position de lecture
 		int pos = relDef.getSlotCount() + (position * relDef.getRecordSize());
-		// on lit les données dans le buffer à partir de cette position
+		// on lit les donnÃ©es dans le buffer Ã  partir de cette position
 		ByteBuffer bf = ByteBuffer.wrap(buff, pos, buff.length - pos);
-		// Parcours de la liste ReIDef pour vérifier le type des colonnes
+		// Parcours de la liste ReIDef pour vÃ©rifier le type des colonnes
 		for (int i = 0; i < relDef.getNbColonnes(); i++) {
 
 			// si la colonne est de type entier
 			if ((relDef.getTypesColonnes().get(i).equals("int"))) {
 				// on ajoute l'entier dans la liste des records
-				values.add(""+bf.getInt());
+				values.add("" + bf.getInt());
 			}
 
 			// si la colonne est de type float
@@ -144,25 +153,31 @@ public class Record {
 				// Lire et Ajouter le float dans la liste
 				values.add("" + bf.getFloat());
 			}
-            
+
 			// si la colonne est de type String
 			else {
-				// on récupère la taille de la chaine
+				// on rÃ©cupÃ¨re la taille de la chaine
 				String str = (relDef.getTypesColonnes().get(i)).replace("string", "").trim();
 
-				// Utilisation de StringBuilder pour Récupérer la chaine
+				// Utilisation de StringBuilder pour RÃ©cupÃ©rer la chaine
 				StringBuilder sb = new StringBuilder();
 
 				// on parcour la chaine
 				for (int j = 0; j < Integer.parseInt(str); j++) {
-					//on lit et ajoute carac par carac dans le StringBuilder
+					// on lit et ajoute carac par carac dans le StringBuilder
 					sb.append((char) (bf.getChar()));
 				}
 
-				// on met  le contenu de StringBuilder dans la liste
+				// on met le contenu de StringBuilder dans la liste
 				values.add(sb.toString());
 			}
 		}
 	}
+
+	public void addValue(String value) {
+		values.add(value);
+	}
+	
+	
 
 }// fin de la classe
