@@ -120,6 +120,9 @@ public class DBManager {
 		case "selectAll":
 			selectAllCommand(mots.get(1));
 			break;
+		case "delete":
+			delete(mots.get(1), Integer.parseInt(mots.get(2)), mots.get(3));
+			break;
 
 		default:
 			// Affiche le message d'erreur
@@ -326,6 +329,25 @@ public class DBManager {
 		}
 
 		System.out.println("Total records = " + nb);
+	}
+	
+	public void delete(String nomRelation, int indiceColone, String valeur) {
+		String nomRelationLowerCase=nomRelation.toLowerCase();
+		//on cherche le nom de la relation dans le FileManager 
+		for(int i=0;i<FileManager.getInstance().getAllHeapFile().size();i++)
+		{
+		if(FileManager.getInstance().getAllHeapFile().get(i).getRelDef().getNomRelation().toLowerCase().equals(nomRelationLowerCase)) 
+			{
+			//on recupere la liste de record associ�e � cette relation
+			List<Record> listDeRecords=FileManager.getInstance().getAllHeapFile().get(i).getAllRecords();
+			//on supprime le record correspondant à la valeur donnee et sur l'indice de la colonne
+			for(int j=0; j<listDeRecords.size(); j++) {
+				if(listDeRecords.get(j).getValues().get(indiceColone).equals(valeur)){
+					listDeRecords.remove(j);
+					}
+				}
+			}
+		}
 	}
 
 }
